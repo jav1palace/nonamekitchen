@@ -28,5 +28,5 @@ jobs:
       - name: npm install
         run: npm ci 
 
-      - name: run test coverage
+      - name: build app
         run: npm run build
