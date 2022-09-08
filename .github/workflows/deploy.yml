@@ -1,0 +1,30 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  staging:
+    runs-on: ubuntu-latest
+    
+    environment: 
+      name: staging
+      url: https://nonamekitchen.herokuapp.com
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: deploy heroku using docker
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: nonamekitchen
+          heroku_email: ${{github.event.pusher.email}}
+          usedocker: true
+          docker_build_args: |
+            NODE_ENV
+        env:
+          NODE_ENV: production
