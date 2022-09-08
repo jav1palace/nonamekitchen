@@ -8,8 +8,8 @@ on:
 jobs:
   staging:
     runs-on: ubuntu-latest
-    
-    environment: 
+
+    environment:
       name: staging
       url: https://nonamekitchen.herokuapp.com
 

@@ -12,7 +12,7 @@ const baseConfig = {
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   autoLoadEntities: true,
-  synchronize: true
+  synchronize: true,
 };
 
 const testConfig = {
@@ -25,17 +25,19 @@ const testConfig = {
 const connections = {
   development: baseConfig,
   production: baseConfig,
-  test: testConfig
-}
+  test: testConfig,
+};
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(connections[process.env.NODE_ENV] || connections.production),
+    TypeOrmModule.forRoot(
+      connections[process.env.NODE_ENV] || connections.production,
+    ),
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
-    })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
