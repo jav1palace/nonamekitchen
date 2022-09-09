@@ -19,7 +19,7 @@ const testConfig = {
   type: 'sqlite',
   synchronize: true,
   database: ':memory:',
-  entities: ['src/**/*.entity.ts'],
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
 };
 
 const connections = {
