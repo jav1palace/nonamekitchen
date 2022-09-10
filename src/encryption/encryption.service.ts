@@ -5,6 +5,10 @@ import * as bcrypt from 'bcrypt';
 export class EncryptionService {
   async hashPassword(password: string) {
     const salt = await bcrypt.genSalt();
-    return await bcrypt.hash(password, salt);
+    return bcrypt.hash(password, salt);
+  }
+
+  isPasswordCorrect(password: string, hash: string) {
+    return bcrypt.compare(password, hash)
   }
 }
