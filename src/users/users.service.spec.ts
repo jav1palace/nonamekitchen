@@ -8,21 +8,30 @@ import { UsersService } from './users.service';
 
 describe('UsersService', () => {
   let service: UsersService;
-  const users = [{ id: 1, username: "username", password: "password", isActive: 1 }];
-  const dto = { username: "username", password: "password" };
+  const users = [
+    { id: 1, username: 'username', password: 'password', isActive: 1 },
+  ];
+  const dto = { username: 'username', password: 'password' };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, EncryptionService, {
-        provide: getRepositoryToken(User),
-        useValue: {
-          find: jest.fn().mockResolvedValue(users),
-          findOneBy: jest.fn().mockResolvedValueOnce(users[0]).mockResolvedValue(undefined),
-          delete: jest.fn().mockResolvedValue(new DeleteResult()),
-          save: jest.fn(),
-          create: jest.fn(),
-        }
-      }],
+      providers: [
+        UsersService,
+        EncryptionService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: {
+            find: jest.fn().mockResolvedValue(users),
+            findOneBy: jest
+              .fn()
+              .mockResolvedValueOnce(users[0])
+              .mockResolvedValue(undefined),
+            delete: jest.fn().mockResolvedValue(new DeleteResult()),
+            save: jest.fn(),
+            create: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     service = module.get<UsersService>(UsersService);
@@ -53,6 +62,5 @@ describe('UsersService', () => {
   it('create', () => {
     expect(service.create(dto)).rejects.toThrowError(BadRequestException);
     expect(service.create(dto)).resolves.toBeUndefined();
-
   });
 });

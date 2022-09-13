@@ -11,12 +11,16 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService, EncryptionService, {
-        provide: getRepositoryToken(User),
-        useValue: {
-          get: jest.fn(() => "mockUserEntity")
-        }
-      }],
+      providers: [
+        UsersService,
+        EncryptionService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: {
+            get: jest.fn(() => 'mockUserEntity'),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);

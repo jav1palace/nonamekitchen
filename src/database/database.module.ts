@@ -33,5 +33,4 @@ const connections = {
     ),
   ],
 })
-
-export class DatabaseModule { }
+export class DatabaseModule {}

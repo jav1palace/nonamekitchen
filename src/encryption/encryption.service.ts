@@ -9,6 +9,6 @@ export class EncryptionService {
   }
 
   isPasswordCorrect(password: string, hash: string) {
-    return bcrypt.compare(password, hash)
+    return bcrypt.compare(password, hash);
   }
 }

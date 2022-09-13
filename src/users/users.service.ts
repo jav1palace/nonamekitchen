@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EncryptionService } from '../encryption/encryption.service';
 import { DataSource, DeleteResult, Repository } from 'typeorm';
@@ -15,11 +20,18 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    if (await this.userRepository.findOneBy({ username: createUserDto.username})) {
+    if (
+      await this.userRepository.findOneBy({ username: createUserDto.username })
+    ) {
       throw new BadRequestException('This user already exists');
     }
-    const hash = await this.encryptionService.hashPassword(createUserDto.password);
-    const newUser = this.userRepository.create({ username: createUserDto.username, password: hash });
+    const hash = await this.encryptionService.hashPassword(
+      createUserDto.password,
+    );
+    const newUser = this.userRepository.create({
+      username: createUserDto.username,
+      password: hash,
+    });
     return this.userRepository.save(newUser);
   }
 
@@ -31,13 +43,18 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) : Promise<User> {
-    let hash : string;
-    if (!await this.findOne(id)) {
-      throw new NotFoundException('Can\'t find the user to update.')
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    let hash: string;
+    if (!(await this.findOne(id))) {
+      throw new NotFoundException("Can't find the user to update.");
     }
 
-    if (updateUserDto.username && await this.userRepository.findOneBy({ username: updateUserDto.username})) {
+    if (
+      updateUserDto.username &&
+      (await this.userRepository.findOneBy({
+        username: updateUserDto.username,
+      }))
+    ) {
       throw new BadRequestException('This user already exists');
     }
 
@@ -45,17 +62,17 @@ export class UsersService {
       hash = await this.encryptionService.hashPassword(updateUserDto.password);
       updateUserDto.password = hash;
     }
-    
+
     return this.userRepository.save({
       id,
       username: updateUserDto.username,
-      ...(updateUserDto.password) && {password: updateUserDto.password}, 
+      ...(updateUserDto.password && { password: updateUserDto.password }),
     });
   }
 
-  async remove(id: number) : Promise<DeleteResult> {
-    if (!await this.findOne(id)) {
-      throw new NotFoundException('Can\'t find the user to delete.')
+  async remove(id: number): Promise<DeleteResult> {
+    if (!(await this.findOne(id))) {
+      throw new NotFoundException("Can't find the user to delete.");
     }
 
     return this.userRepository.delete(id);
