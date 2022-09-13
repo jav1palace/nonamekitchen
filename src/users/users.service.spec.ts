@@ -1,17 +1,17 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { EncryptionService } from '../encryption/encryption.service';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
   let service: UsersService;
+  const dto = { username: 'username', password: 'password' };
   const users = [
     { id: 1, username: 'username', password: 'password', isActive: 1 },
   ];
-  const dto = { username: 'username', password: 'password' };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -50,17 +50,17 @@ describe('UsersService', () => {
   });
 
   it('remove', () => {
-    expect(service.remove(1)).resolves.toBeDefined();
+    expect(service.remove(1)).resolves.toBeDefined(); 
     expect(service.remove(2)).rejects.toThrowError(NotFoundException);
   });
 
   it('update', () => {
-    expect(service.update(1, dto)).resolves.toBeUndefined();
+    expect(service.update(1, dto)).resolves.toBeUndefined(); // THIS IS WRONG
     expect(service.update(2, {})).rejects.toThrowError(NotFoundException);
   });
 
   it('create', () => {
     expect(service.create(dto)).rejects.toThrowError(BadRequestException);
-    expect(service.create(dto)).resolves.toBeUndefined();
+    expect(service.create(dto)).resolves.toBeUndefined(); // THIS IS WRONG
   });
 });
