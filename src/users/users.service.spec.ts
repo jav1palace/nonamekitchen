@@ -50,7 +50,7 @@ describe('UsersService', () => {
   });
 
   it('remove', () => {
-    expect(service.remove(1)).resolves.toBeDefined(); 
+    expect(service.remove(1)).resolves.toBeDefined();
     expect(service.remove(2)).rejects.toThrowError(NotFoundException);
   });
 
