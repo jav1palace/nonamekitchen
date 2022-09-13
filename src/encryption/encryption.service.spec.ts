@@ -18,15 +18,16 @@ describe('EncryptionService', () => {
   });
 
   it('hashPassword function returns a value', async () => {
-    expect(await service.hashPassword(password)).toBeDefined();
+    expect(service.hashPassword(password)).resolves.toBeDefined();
   });
 
   it('isPasswordCorrect returns true if the password matches', async () => {
-    expect(await service.isPasswordCorrect(password, await service.hashPassword(password))).toBeTruthy();
+    const hash = await service.hashPassword(password);
+    expect(service.isPasswordCorrect(password, hash)).resolves.toBeTruthy();
   });
 
   it('isPasswordCorrect returns false if the password does not match', async () => {
     const hash = await service.hashPassword(password);
-    expect(await service.isPasswordCorrect('wrong', hash)).toBeFalsy();
+    expect(service.isPasswordCorrect('wrong', hash)).resolves.toBeFalsy();
   });
 });

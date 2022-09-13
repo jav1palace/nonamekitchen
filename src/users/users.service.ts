@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EncryptionService } from '../encryption/encryption.service';
 import { DataSource, DeleteResult, Repository } from 'typeorm';
@@ -15,9 +15,12 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
+    if (await this.userRepository.findOneBy({ username: createUserDto.username})) {
+      throw new BadRequestException('This user already exists');
+    }
     const hash = await this.encryptionService.hashPassword(createUserDto.password);
     const newUser = this.userRepository.create({ username: createUserDto.username, password: hash });
-    return this.userRepository.create(newUser);
+    return this.userRepository.save(newUser);
   }
 
   findAll() {
@@ -29,19 +32,29 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) : Promise<User> {
-    if (!this.findOne(id)) {
+    let hash : string;
+    if (!await this.findOne(id)) {
       throw new NotFoundException('Can\'t find the user to update.')
+    }
+
+    if (updateUserDto.username && await this.userRepository.findOneBy({ username: updateUserDto.username})) {
+      throw new BadRequestException('This user already exists');
+    }
+
+    if (updateUserDto.password) {
+      hash = await this.encryptionService.hashPassword(updateUserDto.password);
+      updateUserDto.password = hash;
     }
     
     return this.userRepository.save({
       id,
       username: updateUserDto.username,
-      password: updateUserDto.password
+      ...(updateUserDto.password) && {password: updateUserDto.password}, 
     });
   }
 
-  remove(id: number) : Promise<DeleteResult> {
-    if (!this.findOne(id)) {
+  async remove(id: number) : Promise<DeleteResult> {
+    if (!await this.findOne(id)) {
       throw new NotFoundException('Can\'t find the user to delete.')
     }
 
