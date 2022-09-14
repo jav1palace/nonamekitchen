@@ -19,22 +19,21 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const getCriteria = (dto: CreateUserDto) => ({
+    const getCriteria = () => ({
       username: createUserDto.username,
     });
-    const getUser = (criteria: object, hash: string) => ({
-      ...criteria,
+    const getUser = (hash: string) => ({
+      ...getCriteria(),
       password: hash,
     });
 
-    const criteria = getCriteria(createUserDto);
-    if (await this.userRepository.findOneBy(criteria)) {
+    if (await this.userRepository.findOneBy(getCriteria())) {
       throw new BadRequestException('This user already exists');
     }
     const hash = await this.encryptionService.hashPassword(
       createUserDto.password,
     );
-    const newUser = this.userRepository.create(getUser(criteria, hash));
+    const newUser = this.userRepository.create(getUser(hash));
     return this.userRepository.save(newUser);
   }
 

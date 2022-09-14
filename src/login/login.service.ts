@@ -1,13 +1,9 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { User } from '../users/entities/user.entity';
-import { Repository } from 'typeorm';
-import { LoginDto } from './dto/login.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { EncryptionService } from '../encryption/encryption.service';
+import { User } from '../users/entities/user.entity';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class LoginService {
