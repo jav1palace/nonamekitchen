@@ -19,18 +19,22 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    if (
-      await this.userRepository.findOneBy({ username: createUserDto.username })
-    ) {
+    const getCriteria = (dto: CreateUserDto) => ({
+      username: createUserDto.username,
+    });
+    const getUser = (criteria: object, hash: string) => ({
+      ...criteria,
+      password: hash,
+    });
+
+    const criteria = getCriteria(createUserDto);
+    if (await this.userRepository.findOneBy(criteria)) {
       throw new BadRequestException('This user already exists');
     }
     const hash = await this.encryptionService.hashPassword(
       createUserDto.password,
     );
-    const newUser = this.userRepository.create({
-      username: createUserDto.username,
-      password: hash,
-    });
+    const newUser = this.userRepository.create(getUser(criteria, hash));
     return this.userRepository.save(newUser);
   }
 
@@ -44,16 +48,17 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     let hash: string;
+    const isUsernameInvalid = async () =>
+      updateUserDto.username &&
+      (await this.userRepository.findOneBy({
+        username: updateUserDto.username,
+      }));
+
     if (!(await this.findOne(id))) {
       throw new NotFoundException("Can't find the user to update.");
     }
 
-    if (
-      updateUserDto.username &&
-      (await this.userRepository.findOneBy({
-        username: updateUserDto.username,
-      }))
-    ) {
+    if (await isUsernameInvalid()) {
       throw new BadRequestException('This user already exists');
     }
 
