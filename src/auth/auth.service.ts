@@ -15,9 +15,9 @@ export class AuthService {
     private readonly encryptionService: EncryptionService,
     private readonly jwtService: JwtService,
   ) {}
-  
+
   // update any
-  async validateUser(username: string, pass: string): Promise<any> { 
+  async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.userRepository.findOneBy({
       username,
     });
