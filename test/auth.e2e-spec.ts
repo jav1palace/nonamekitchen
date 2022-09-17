@@ -4,14 +4,13 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { UsersService } from '../src/users/users.service';
 
-describe('LoginController (e2e)', () => {
+describe('AuthController (e2e)', () => {
   let app: INestApplication;
   let usersService: UsersService;
 
   const errorResponse = {
-    statusCode: 400,
-    message: 'Username or password incorrect',
-    error: 'Bad Request',
+    statusCode: 401,
+    message: 'Unauthorized',
   };
 
   beforeEach(async () => {
@@ -26,27 +25,30 @@ describe('LoginController (e2e)', () => {
     await usersService.create({ username: 'username', password: 'password' });
   });
 
-  it('/ (POST)', () => {
+  it('/login (POST)', () => {
     return request(app.getHttpServer())
-      .post('/login')
+      .post('/auth/login')
       .send({ username: 'username', password: 'password' })
       .expect(200)
-      .expect('true');
+      .then((res) => {
+        expect(res.body).toHaveProperty('access_token');
+        expect(res.body.access_token).toBeDefined();
+      });
   });
 
-  it('/ (POST) [wrong password]', () => {
+  it('/login (POST) [wrong password]', () => {
     return request(app.getHttpServer())
-      .post('/login')
+      .post('/auth/login')
       .send({ username: 'username', password: 'wrong' })
-      .expect(400)
+      .expect(401)
       .expect(errorResponse);
   });
 
-  it('/ (POST) [wrong username]', () => {
+  it('/login (POST) [wrong username]', () => {
     return request(app.getHttpServer())
-      .post('/login')
+      .post('/auth/login')
       .send({ username: 'wrong', password: 'password' })
-      .expect(400)
+      .expect(401)
       .expect(errorResponse);
   });
 });

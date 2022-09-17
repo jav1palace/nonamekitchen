@@ -1,12 +1,14 @@
 import { BadRequestException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+
 import { EncryptionService } from '../encryption/encryption.service';
 import { User } from '../users/entities/user.entity';
-import { LoginService } from './login.service';
+import { AuthService } from './auth.service';
 
-describe('LoginService', () => {
-  let service: LoginService;
+describe('AuthService', () => {
+  let service: AuthService;
   const user = {
     id: 1,
     username: 'username',
@@ -16,7 +18,8 @@ describe('LoginService', () => {
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        LoginService,
+        AuthService,
+        JwtService,
         {
           provide: EncryptionService,
           useValue: {
@@ -41,7 +44,7 @@ describe('LoginService', () => {
       ],
     }).compile();
 
-    service = module.get<LoginService>(LoginService);
+    service = module.get<AuthService>(AuthService);
   });
 
   it('should be defined', () => {
@@ -49,20 +52,17 @@ describe('LoginService', () => {
   });
 
   it('login', () => {
-    expect(
-      service.login({ username: 'username', password: 'password' }),
-    ).resolves.toBe(true);
+    const { password, ...response } = user;
+    expect(service.validateUser('username', 'password')).resolves.toMatchObject(
+      response,
+    );
   });
 
   it('login [wrong password]', () => {
-    expect(
-      service.login({ username: 'username', password: 'wrong' }),
-    ).rejects.toThrowError(BadRequestException);
+    expect(service.validateUser('username', 'wrong')).resolves.toBeNull();
   });
 
   it('login [wrong password]', () => {
-    expect(
-      service.login({ username: 'wrong', password: 'password' }),
-    ).rejects.toThrowError(BadRequestException);
+    expect(service.validateUser('wrong', 'password')).resolves.toBeNull();
   });
 });
