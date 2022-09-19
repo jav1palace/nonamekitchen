@@ -2,15 +2,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { JwtAuthGuard } from '../src/auth/guards/jwt-auth.guard';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
   const dto = { username: 'username', password: 'password' };
 
   beforeAll(async () => {
+    let jtwAuthGuard = { canActivate: () => true };
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideGuard(JwtAuthGuard)
+      .useValue(jtwAuthGuard)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
