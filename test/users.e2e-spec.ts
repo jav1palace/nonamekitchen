@@ -87,6 +87,8 @@ describe('UserController (e2e)', () => {
       .then((res) => {
         expect(res.body).toHaveProperty('id');
         expect(res.body).toHaveProperty('password'); // the updated field
+        expect(res.body).toHaveProperty('username'); // the existing field
+        expect(res.body).toHaveProperty('isActive'); // the existing field
       }));
 
   it('/:id (DELETE)', () =>
