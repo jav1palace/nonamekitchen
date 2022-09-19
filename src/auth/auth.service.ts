@@ -27,7 +27,7 @@ export class AuthService {
       (await this.encryptionService.isPasswordCorrect(pass, user.password));
 
     if (canLogin) {
-      const { password, ...result } = user;
+      const { ...result } = user;
       return result;
     }
 

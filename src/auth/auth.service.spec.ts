@@ -1,4 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -52,7 +51,7 @@ describe('AuthService', () => {
   });
 
   it('login', () => {
-    const { password, ...response } = user;
+    const { ...response } = user;
     expect(service.validateUser('username', 'password')).resolves.toMatchObject(
       response,
     );
