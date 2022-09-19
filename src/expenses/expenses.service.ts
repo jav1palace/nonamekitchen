@@ -12,7 +12,7 @@ export class ExpensesService {
     private readonly expenseRepository: Repository<Expense>,
   ) {}
 
-  async create(createExpenseDto: CreateExpenseDto) {
+  create(createExpenseDto: CreateExpenseDto) {
     const newExpense = this.expenseRepository.create(createExpenseDto);
     return this.expenseRepository.save(newExpense);
   }

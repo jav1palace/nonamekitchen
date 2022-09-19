@@ -29,7 +29,7 @@ describe('ExpensesService', () => {
               .mockResolvedValueOnce(expenses[0])
               .mockResolvedValue(undefined),
             delete: jest.fn().mockResolvedValue(new DeleteResult()),
-            save: jest.fn(),
+            save: jest.fn().mockResolvedValue(expenses[0]),
             create: jest.fn(),
           },
         },
@@ -57,14 +57,11 @@ describe('ExpensesService', () => {
   });
 
   it('update', () => {
-    expect(service.update(1, expenseDto)).resolves.toBeUndefined(); // THIS IS WRONG
+    expect(service.update(1, expenseDto)).resolves.toEqual(expenses[0]);
     expect(service.update(2, {})).rejects.toThrowError(NotFoundException);
   });
 
   it('create', () => {
-    expect(service.create(expenseDto)).rejects.toThrowError(
-      BadRequestException,
-    );
-    expect(service.create(expenseDto)).resolves.toBeUndefined(); // THIS IS WRONG
+    expect(service.create(expenseDto)).resolves.toEqual(expenses[0]); 
   });
 });
