@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { LoginController } from './login/login.controller';
-import { LoginModule } from './login/login.module';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ExpensesModule } from './expenses/expenses.module';
 
@@ -14,10 +15,10 @@ import { ExpensesModule } from './expenses/expenses.module';
       isGlobal: true,
     }),
     UsersModule,
-    LoginModule,
     ExpensesModule,
+    AuthModule,
   ],
-  controllers: [AppController, LoginController],
+  controllers: [AppController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
