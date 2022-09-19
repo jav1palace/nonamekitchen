@@ -62,6 +62,6 @@ describe('ExpensesService', () => {
   });
 
   it('create', () => {
-    expect(service.create(expenseDto)).resolves.toEqual(expenses[0]); 
+    expect(service.create(expenseDto)).resolves.toEqual(expenses[0]);
   });
 });
