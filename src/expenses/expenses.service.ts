@@ -14,7 +14,6 @@ export class ExpensesService {
 
   create(createExpenseDto: CreateExpenseDto) {
     const newExpense = this.expenseRepository.create(createExpenseDto);
-    console.log(createExpenseDto.date);
     return this.expenseRepository.save(newExpense);
   }
 
