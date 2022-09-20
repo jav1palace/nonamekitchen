@@ -1,40 +1,56 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
+
 import { AppModule } from '../src/app.module';
-import { JwtAuthGuard } from '../src/auth/guards/jwt-auth.guard';
+import { UsersService } from '../src/users/users.service';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
+  let usersService: UsersService;
+  let authToken = 'Bearer ';
   const dto = { username: 'username', password: 'password' };
 
   beforeAll(async () => {
-    let jtwAuthGuard = { canActivate: () => true };
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    })
-      .overrideGuard(JwtAuthGuard)
-      .useValue(jtwAuthGuard)
-      .compile();
+    }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    usersService = moduleFixture.get(UsersService);
+    await usersService.create({ username: 'admin', password: 'password' });
+  });
+
+  it('/login (POST)', () => {
+    return request(app.getHttpServer())
+      .post('/auth/login')
+      .send({ username: 'admin', password: 'password' })
+      .expect(200)
+      .then((res) => {
+        authToken += res.body.access_token;
+        expect(res.body).toHaveProperty('access_token');
+        expect(res.body.access_token).toBeDefined();
+      });
   });
 
   it('/:id (GET) [Empty]', () =>
     request(app.getHttpServer())
       .get('/users/1') // the user previously created
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .expect(200)
       .then((res) => {
-        expect(res.body).not.toHaveProperty('id');
-        expect(res.body).not.toHaveProperty('username');
-        expect(res.body).not.toHaveProperty('password');
-        expect(res.body).not.toHaveProperty('isActive');
+        expect(res.body).toHaveProperty('id');
+        expect(res.body).toHaveProperty('username');
+        expect(res.body).toHaveProperty('password');
+        expect(res.body).toHaveProperty('isActive');
       }));
 
   it('/ (POST)', () =>
     request(app.getHttpServer())
       .post('/users')
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .send(dto)
       .expect(201)
       .then((res) => {
@@ -47,6 +63,7 @@ describe('UserController (e2e)', () => {
   it('/ (POST) [Error]', () =>
     request(app.getHttpServer())
       .post('/users')
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .send(dto)
       .expect(400)
       .then((res) => {
@@ -56,6 +73,7 @@ describe('UserController (e2e)', () => {
   it('/:id (PATCH) [Duplicate]', () =>
     request(app.getHttpServer())
       .patch('/users/1') // the user previously created
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .send({ username: 'username' })
       .expect(400)
       .then((res) => {
@@ -65,6 +83,7 @@ describe('UserController (e2e)', () => {
   it('/ (GET)', () =>
     request(app.getHttpServer())
       .get('/users')
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .expect(200)
       .then((res) => {
         expect(res.body[0]).toHaveProperty('id');
@@ -73,20 +92,10 @@ describe('UserController (e2e)', () => {
         expect(res.body[0]).toHaveProperty('isActive');
       }));
 
-  it('/:id (GET)', () =>
-    request(app.getHttpServer())
-      .get('/users/1') // the user previously created
-      .expect(200)
-      .then((res) => {
-        expect(res.body).toHaveProperty('id');
-        expect(res.body).toHaveProperty('username');
-        expect(res.body).toHaveProperty('password');
-        expect(res.body).toHaveProperty('isActive');
-      }));
-
   it('/:id (PATCH)', () =>
     request(app.getHttpServer())
       .patch('/users/1') // the user previously created
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .send({ password: 'aa' })
       .expect(200)
       .then((res) => {
@@ -97,14 +106,26 @@ describe('UserController (e2e)', () => {
   it('/:id (DELETE)', () =>
     request(app.getHttpServer())
       .delete('/users/1') // the user previously created
+      .set({ Authorization: authToken, Accept: 'application/json' })
+      .expect(200));
+
+  it('/:id (DELETE 2)', () =>
+    request(app.getHttpServer())
+      .delete('/users/2') // the user previously created
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .expect(200));
 
   it('/ (GET) [Empty]', () =>
-    request(app.getHttpServer()).get('/users').expect(200).expect([]));
+    request(app.getHttpServer())
+      .get('/users')
+      .set({ Authorization: authToken, Accept: 'application/json' })
+      .expect(200)
+      .expect([]));
 
   it('/:id (PATCH) [Not Existing]', () =>
     request(app.getHttpServer())
       .patch('/users/1') // the user previously created
+      .set({ Authorization: authToken, Accept: 'application/json' })
       .send({ password: 'aa' })
       .expect(404)
       .then((res) => {
