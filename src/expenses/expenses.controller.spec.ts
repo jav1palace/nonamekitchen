@@ -1,21 +1,14 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DeleteResult } from 'typeorm';
-import { CreateExpenseDto } from './dto/create-expense.dto';
 import { Expense } from './entities/expense.entity';
 import { ExpensesController } from './expenses.controller';
 import { ExpensesService } from './expenses.service';
+import { expenseDto, expenses } from './expenses.mock';
 
 describe('ExpensesController', () => {
   let controller: ExpensesController;
-  const expenseDto: CreateExpenseDto = {
-    date: new Date(Date.now().toLocaleString()),
-    notes: 'This is an example expense',
-  };
-  const expenses = [
-    { id: 1, date: '2022-09-19', notes: 'This is an example expense' },
-  ];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
