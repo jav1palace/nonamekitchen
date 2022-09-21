@@ -19,7 +19,7 @@ export class CreateExpenseDto {
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
-  inputDate: Date;
+  createdDate: Date;
 
   @Type(() => Date)
   @IsDate()
@@ -46,10 +46,6 @@ export class CreateExpenseDto {
   @IsEnum(NNK_CURRENCIES)
   @IsNotEmpty()
   currency: NNK_CURRENCIES;
-
-  @IsNumber()
-  @IsOptional()
-  totalAmount?: number;
 
   @IsEnum(NNK_DONORS)
   @IsNotEmpty()

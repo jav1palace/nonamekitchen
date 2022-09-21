@@ -14,7 +14,6 @@ export class ExpensesService {
 
   create(createExpenseDto: CreateExpenseDto) {
     const newExpense = this.expenseRepository.create(createExpenseDto);
-    //TODO: Add the calculation of the total amount
     return this.expenseRepository.save(newExpense);
   }
 

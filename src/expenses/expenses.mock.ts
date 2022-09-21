@@ -8,7 +8,7 @@ import {
 } from './expenses.constants';
 
 export const expenseDto: CreateExpenseDto = {
-  inputDate: new Date(Date.now().toLocaleString()),
+  createdDate: new Date(Date.now().toLocaleString()),
   expenseDate: new Date(Date.now().toLocaleString()),
   team: NNK_TEAMS.BHC,
   category: NNK_EXPENSES_CATEGORIES.NFIs,
@@ -22,7 +22,7 @@ export const expenseDto: CreateExpenseDto = {
 export const expenses = [
   {
     id: 1,
-    inputDate: new Date(Date.now().toLocaleString()),
+    createdDate: new Date(Date.now().toLocaleString()),
     expenseDate: new Date(Date.now().toLocaleString()),
     team: NNK_TEAMS.BHC,
     category: NNK_EXPENSES_CATEGORIES.NFIs,

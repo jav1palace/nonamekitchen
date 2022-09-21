@@ -1,3 +1,4 @@
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import {
   NNK_TEAMS,
@@ -13,34 +14,43 @@ export class Expense {
   id: number;
 
   @Column()
-  inputDate: Date;
+  createdDate: Date;
 
   @Column()
   expenseDate: Date;
 
   //un?  Do they need this field stores or show anywhere
 
-  @Column()
+  @IsString({ always: true })
+  @Column({ type: 'varchar', length: 32, nullable: false })
   team: NNK_TEAMS;
 
-  @Column()
+  @IsString({ always: true })
+  @Column({ type: 'varchar', length: 100, nullable: false })
   category: NNK_EXPENSES_CATEGORIES;
 
-  @Column()
+  @IsString({ always: true })
+  @Column({ type: 'varchar', length: 100, nullable: false })
   concept: NNK_EXPENSES_CONCEPTS;
 
+  @IsNumber()
   @Column()
   amount: number;
 
-  @Column()
+  @IsString({ always: true })
+  @Column({ type: 'varchar', length: 32, nullable: false })
   currency: NNK_CURRENCIES;
 
+  @IsNumber()
   @Column()
   totalAmount: number;
 
-  @Column()
+  @IsString({ always: true })
+  @Column({ type: 'varchar', length: 32, nullable: false })
   donor: NNK_DONORS;
 
-  @Column({ nullable: true })
+  @IsOptional({ always: true })
+  @IsString({ always: true })
+  @Column({ type: 'varchar', length: 255, nullable: true, default: null })
   notes: string;
 }
