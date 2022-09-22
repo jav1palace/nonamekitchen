@@ -1,4 +1,4 @@
-import { ConsoleLogger, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateExpenseDto } from './dto/create-expense.dto';
@@ -15,7 +15,6 @@ export class ExpensesService {
 
   create(createExpenseDto: CreateExpenseDto) {
     const newExpense = this.expenseRepository.create(createExpenseDto);
-    console.log('newExpense: ' + newExpense);
     this.calculateTotalAmount(newExpense);
     return this.expenseRepository.save(newExpense);
   }
@@ -49,7 +48,6 @@ export class ExpensesService {
   }
 
   calculateTotalAmount(newExpense) {
-    console.log('Aqui: ' + newExpense);
     switch (newExpense.currency) {
       case NNK_CURRENCIES.BAM:
         newExpense.totalAmount = newExpense.amount * 0.51;
