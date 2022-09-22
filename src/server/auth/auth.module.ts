@@ -6,6 +6,7 @@ import { EncryptionModule } from '../encryption/encryption.module';
 import { UsersModule } from '../users/users.module';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
+import { SessionSerializer } from './serializers/session.serializer';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
@@ -13,13 +14,13 @@ import { LocalStrategy } from './strategies/local.strategy';
   imports: [
     UsersModule,
     EncryptionModule,
-    PassportModule,
+    PassportModule.register({ session: true }),
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
+  providers: [AuthService, JwtStrategy, LocalStrategy, SessionSerializer],
   exports: [AuthService],
 })
 export class AuthModule {}

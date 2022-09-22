@@ -1,12 +1,23 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { User } from '../users/entities/user.entity';
 
-const baseConfig = {
+// const baseConfig: TypeOrmModuleOptions = {
+//   type: 'mysql',
+//   host: 'eu-cdbr-west-03.cleardb.net',
+//   port: 3306,
+//   username: 'b59ab79ef5734d',
+//   password: '9433bf64',
+//   database: 'heroku_58484eeea6dfec3',
+//   entities: [User],
+//   synchronize: true,
+// };
+
+const baseConfig: TypeOrmModuleOptions = {
   type: 'mysql',
   host: process.env.DATABASE_HOST,
-  port: process.env.DATABASE_PORT,
+  port: parseInt(process.env.DATABASE_PORT),
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
@@ -14,7 +25,7 @@ const baseConfig = {
   synchronize: true,
 };
 
-const testConfig = {
+const testConfig: TypeOrmModuleOptions = {
   type: 'sqlite',
   synchronize: true,
   database: ':memory:',

@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
@@ -15,15 +15,8 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         EncryptionService,
-        {
-          provide: AuthService,
-          useValue: {
-            login: jest
-              .fn()
-              .mockResolvedValueOnce(true)
-              .mockRejectedValue(new BadRequestException()),
-          },
-        },
+        AuthService,
+        JwtService,
         {
           provide: getRepositoryToken(User),
           useValue: {
@@ -41,20 +34,10 @@ describe('AuthController', () => {
   });
 
   it('login', () => {
-    expect(
-      controller.login({ username: 'username', password: 'password' }),
-    ).resolves.toBe(true);
-  });
-
-  it('login [wrong password]', () => {
-    expect(
-      controller.login({ username: 'username', password: 'wrong' }),
-    ).rejects.toThrowError(BadRequestException);
-  });
-
-  it('login [wrong username]', () => {
-    expect(
-      controller.login({ username: 'wrong', password: 'password' }),
-    ).rejects.toThrowError(BadRequestException);
+    const req = { user: { username: 'username', password: 'password' } };
+    expect(controller.login(req)).resolves.toEqual({
+      ...req,
+      msg: 'User logged in',
+    });
   });
 });

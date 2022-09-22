@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { RenderModule } from 'nest-next';
+import Next from 'next';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -9,6 +11,10 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    RenderModule.forRootAsync(
+      Next({ dev: process.env.NODE_ENV !== 'production' }),
+      { viewsDir: null },
+    ),
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
       isGlobal: true,
