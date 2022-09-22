@@ -19,11 +19,6 @@ export class CreateExpenseDto {
   @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
-  createdDate: Date;
-
-  @Type(() => Date)
-  @IsDate()
-  @IsNotEmpty()
   expenseDate: Date;
 
   //un?  Do they need this field stores or show anywhere

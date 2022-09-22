@@ -25,10 +25,10 @@ export enum NNK_DONORS {
 }
 
 export enum NNK_CURRENCIES {
-  BAM,
-  DINAR,
-  HRK,
-  EURO,
+  BAM = 'BAM',
+  DINAR = 'DINAR',
+  HRK = 'HRK',
+  EURO = 'EURO',
 }
 
 export enum NNK_EXPENSES_CATEGORIES {

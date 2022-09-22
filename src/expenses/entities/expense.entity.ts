@@ -13,7 +13,7 @@ export class Expense {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdDate: Date;
 
   @Column()
@@ -34,7 +34,7 @@ export class Expense {
   concept: NNK_EXPENSES_CONCEPTS;
 
   @IsNumber()
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   amount: number;
 
   @IsString({ always: true })
@@ -42,7 +42,7 @@ export class Expense {
   currency: NNK_CURRENCIES;
 
   @IsNumber()
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   totalAmount: number;
 
   @IsString({ always: true })

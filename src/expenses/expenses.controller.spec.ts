@@ -25,7 +25,7 @@ describe('ExpensesController', () => {
               .mockResolvedValue(undefined),
             delete: jest.fn().mockResolvedValue(new DeleteResult()),
             save: jest.fn().mockResolvedValue(expenses[0]),
-            create: jest.fn(),
+            create: jest.fn().mockResolvedValue(expenses[0]),
           },
         },
       ],

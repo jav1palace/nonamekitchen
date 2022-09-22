@@ -8,7 +8,6 @@ import {
 } from './expenses.constants';
 
 export const expenseDto: CreateExpenseDto = {
-  createdDate: new Date(Date.now().toLocaleString()),
   expenseDate: new Date(Date.now().toLocaleString()),
   team: NNK_TEAMS.BHC,
   category: NNK_EXPENSES_CATEGORIES.NFIs,
@@ -22,12 +21,13 @@ export const expenseDto: CreateExpenseDto = {
 export const expenses = [
   {
     id: 1,
-    createdDate: new Date(Date.now().toLocaleString()),
-    expenseDate: new Date(Date.now().toLocaleString()),
+    createdDate: new Date(Date.now()),
+    expenseDate: new Date(Date.now()),
     team: NNK_TEAMS.BHC,
     category: NNK_EXPENSES_CATEGORIES.NFIs,
     concept: NNK_EXPENSES_CONCEPTS.clothes,
     amount: 100.0,
+    totalAmount: 51,
     currency: NNK_CURRENCIES.BAM,
     donor: NNK_DONORS.DONORBOX,
     notes: 'This is an example expense',
