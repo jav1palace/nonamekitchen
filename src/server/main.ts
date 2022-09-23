@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import session from 'express-session';
 import { RenderService } from 'nest-next';
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || process.env.SERVER_PORT;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.useGlobalPipes(new ValidationPipe());
   app.use(
     session({
       secret: 'keyboard',

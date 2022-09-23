@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { ExpensesModule } from './expenses/expenses.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
     UsersModule,
+    ExpensesModule,
     AuthModule,
   ],
   controllers: [AppController, AuthController],

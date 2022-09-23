@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
+
 import { EncryptionService } from '../encryption/encryption.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -53,7 +54,22 @@ export class UsersService {
         username: updateUserDto.username,
       }));
 
-    if (!(await this.findOne(id))) {
+    const updateFields = (user: User) => {
+      const notEmpty = Object.fromEntries(
+        Object.entries(updateUserDto).filter(([, v]) => v != null),
+      );
+
+      Object.entries(notEmpty).forEach((entry) => {
+        const key = entry[0];
+        const value = entry[1];
+        user[key] = value;
+      });
+
+      return user;
+    };
+
+    const user = await this.findOne(id);
+    if (!user) {
       throw new NotFoundException("Can't find the user to update.");
     }
 
@@ -65,12 +81,9 @@ export class UsersService {
       hash = await this.encryptionService.hashPassword(updateUserDto.password);
       updateUserDto.password = hash;
     }
+    const updatedUser = updateFields(user);
 
-    return this.userRepository.save({
-      id,
-      username: updateUserDto.username,
-      ...(updateUserDto.password && { password: updateUserDto.password }),
-    });
+    return this.userRepository.save(updatedUser);
   }
 
   async remove(id: number): Promise<DeleteResult> {

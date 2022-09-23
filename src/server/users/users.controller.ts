@@ -5,7 +5,6 @@ import {
   Get,
   NotFoundException,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -33,7 +32,7 @@ export class UsersController {
 
   @UseGuards(AuthenticatedGuard)
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: string) {
+  async findOne(@Param('id') id: string) {
     const user = await this.usersService.findOne(+id);
     if (!user) {
       throw new NotFoundException();
@@ -44,16 +43,13 @@ export class UsersController {
 
   @UseGuards(AuthenticatedGuard)
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.update(parseInt(id), updateUserDto);
+  update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @UseGuards(AuthenticatedGuard)
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: string) {
+  remove(@Param('id') id: number) {
     return this.usersService.remove(+id);
   }
 }
