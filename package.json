@@ -17,7 +17,7 @@
     "start:debug": "NODE_ENV=development nest start --debug 0.0.0.0:9229 --watch",
     "start:prod": "NODE_ENV=production node dist/main",
     "start:next": "next dev",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.{ts}\" --fix",
+    "lint": "eslint \"{src,test}/**/*.{ts,tsx}\" --fix",
     "test": "jest",
     "typeorm": "typeorm",
     "test:watch": "jest --watch",

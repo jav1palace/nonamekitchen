@@ -1,29 +1,33 @@
-import { NextPage, NextPageContext } from 'next';
+import 'bootstrap/dist/css/bootstrap.css';
 
-// The component's props type
-type InputProps = {
-  title: string;
-};
+import { NextPage } from 'next';
 
-// extending the default next context type
-type InputContext = NextPageContext & {
-  query: InputProps;
-};
+import { ExpenseForm } from '../components/expense-input/expense-input';
 
 // react component
-const InputPage: NextPage<InputProps> = ({ title }) => {
+const InputPage: NextPage = ({}) => {
   return (
-    <div>
-      <h1>{title}</h1>
-    </div>
+    <main className="vh-100 d-flex justify-content-center align-items-center">
+      <ExpenseForm />
+    </main>
   );
 };
 
-// assigning the initial props to the component's props
-InputPage.getInitialProps = (ctx: InputContext) => {
+export async function getServerSideProps(context) {
+  let result = {};
+  if (!context?.req?.user) {
+    result = {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      },
+    };
+  }
+
   return {
-    title: ctx.query.title,
+    ...result,
+    props: {},
   };
-};
+}
 
 export default InputPage;

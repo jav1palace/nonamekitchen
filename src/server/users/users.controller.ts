@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -32,8 +33,13 @@ export class UsersController {
 
   @UseGuards(AuthenticatedGuard)
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: string) {
+    const user = await this.usersService.findOne(+id);
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 
   @UseGuards(AuthenticatedGuard)
