@@ -1,10 +1,10 @@
 export enum NNK_TEAMS {
-  BHC,
-  CEU,
-  GRE,
-  MNE,
-  SRB,
-  VK,
+  BHC = 'BHC',
+  CEU = 'CEU',
+  GRE = 'GRE',
+  MNE = 'MNE',
+  SRB = 'SRB',
+  VK = 'VK',
 }
 
 export enum NNK_DONORS {

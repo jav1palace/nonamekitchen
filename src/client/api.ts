@@ -1,3 +1,4 @@
+import { CreateExpenseDto } from '../server/expenses/dto/create-expense.dto';
 import { Credentials } from './interfaces/api.interface';
 
 export const login = async (credentials: Credentials) => {
@@ -7,6 +8,16 @@ export const login = async (credentials: Credentials) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(credentials),
+  });
+};
+
+export const createExpense = async (expenseDTO: CreateExpenseDto) => {
+  return fetch('/expenses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(expenseDTO),
   });
 };
 

@@ -1,11 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-      "noEmit": false
+    "noEmit": false
   },
   "include": [
-      "./src/server/**/*.ts",
-      "./src/shared/**/*.ts",
-      "./@types/**/*.d.ts"
+    "./src/server/**/*.ts",
+    "./src/shared/**/*.ts",
+    "./@types/**/*.d.ts"
   ]
 }

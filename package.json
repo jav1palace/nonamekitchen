@@ -10,7 +10,7 @@
     "build": "npm run build:next && npm run build:nest",
     "build:nest": "nest build --path ./tsconfig.server.json",
     "build:next": "next build",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\" \"**/*.yml\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"src/**/*.tsx\" \"**/*.{yml,json,css}\"",
     "format:check": "prettier --check",
     "start": "nest start",
     "start:dev": "NODE_ENV=development nest start --watch  --path ./tsconfig.server.json",
