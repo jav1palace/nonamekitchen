@@ -4,7 +4,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import console from 'console';
 import { DeleteResult, Repository } from 'typeorm';
 import { EncryptionService } from '../encryption/encryption.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -56,7 +55,7 @@ export class UsersService {
 
     const updateFields = (user: User) => {
       const notEmpty = Object.fromEntries(
-        Object.entries(updateUserDto).filter(([_, v]) => v != null),
+        Object.entries(updateUserDto).filter(([, v]) => v != null),
       );
 
       Object.entries(notEmpty).forEach((entry) => {

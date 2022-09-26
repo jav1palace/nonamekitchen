@@ -15,7 +15,10 @@ export class ExpensesService {
 
   create(createExpenseDto: CreateExpenseDto) {
     const newExpense = this.expenseRepository.create(createExpenseDto);
-    this.calculateTotalAmount(newExpense);
+    newExpense.totalAmount = this.calculateTotalAmount(
+      newExpense.amount,
+      newExpense.currency,
+    );
     return this.expenseRepository.save(newExpense);
   }
 
@@ -47,20 +50,22 @@ export class ExpensesService {
     return this.expenseRepository.delete(id);
   }
 
-  calculateTotalAmount(newExpense) {
-    switch (newExpense.currency) {
+  calculateTotalAmount(amount: number, currency: string): number {
+    let totalAmount: number;
+    switch (currency) {
       case NNK_CURRENCIES.BAM:
-        newExpense.totalAmount = newExpense.amount * 0.51;
+        totalAmount = amount * 0.51;
         break;
       case NNK_CURRENCIES.DINAR:
-        newExpense.totalAmount = newExpense.amount * 0.0085;
+        totalAmount = amount * 0.0085;
         break;
       case NNK_CURRENCIES.HRK:
-        newExpense.totalAmount = newExpense.amount / 7.4991;
+        totalAmount = amount / 7.4991;
         break;
       case NNK_CURRENCIES.EURO:
-        newExpense.totalAmount = newExpense.amount;
+        totalAmount = amount;
         break;
     }
+    return parseFloat(totalAmount.toFixed(2));
   }
 }
