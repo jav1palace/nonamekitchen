@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { login } from '../../client/api';
 import { Credentials } from '../../client/interfaces/api.interface';
 import { LoginDto } from '../../server/users/dto/login.dto';
-import { FieldItem } from '../expense-input/item/item';
+import { FieldItem } from '../expense/item/item';
 import styles from './login-form.module.css';
 
 const initialValues: LoginDto = {
@@ -32,7 +32,7 @@ export const LoginForm = () => {
           { setSubmitting }: FormikHelpers<Credentials>,
         ) => {
           setTimeout(() => {
-            const success = () => router.push('/input');
+            const success = () => router.push('/new');
             const failure = async (response: Response) => {
               const responseJSON = await response.json();
               setError(responseJSON['message']);

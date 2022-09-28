@@ -16,7 +16,7 @@ export const Navbar = () => (
     </button>
     <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div className="navbar-nav">
-        <a className="nav-item nav-link" href="/input">
+        <a className="nav-item nav-link" href="/new">
           New Expense
         </a>
         <a className="nav-item nav-link" href="/auth/logout">

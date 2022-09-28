@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
-import { Layout } from '../components/layout.tsx/layout';
+import { Layout } from '../components/layout/layout';
 
-import { ExpenseForm } from '../components/expense-input/expense-input';
+import { ExpenseForm } from '../components/expense/expense-form';
 
 // react component
 const InputPage: NextPage = ({}) => (
