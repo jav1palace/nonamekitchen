@@ -17,9 +17,9 @@ export class AppController {
     return {};
   }
 
-  @Get('input')
-  @Render('input')
-  input() {
+  @Get('new')
+  @Render('new')
+  new() {
     return {};
   }
 }

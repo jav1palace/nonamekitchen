@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 import { RenderModule } from 'nest-next';
 import Next from 'next';
 
@@ -19,6 +21,9 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
       isGlobal: true,
+    }),
+    MulterModule.register({
+      storage: memoryStorage(),
     }),
     UsersModule,
     ExpensesModule,

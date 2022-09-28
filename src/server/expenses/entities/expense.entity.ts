@@ -1,5 +1,12 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Attachment } from 'src/server/attachments/entities/attachment.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import {
   NNK_TEAMS,
   NNK_EXPENSES_CATEGORIES,
@@ -43,7 +50,7 @@ export class Expense {
 
   @IsNumber()
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  totalAmount: number;
+  totalAmount?: number;
 
   @IsString({ always: true })
   @Column({ type: 'varchar', length: 32, nullable: false })
@@ -52,5 +59,14 @@ export class Expense {
   @IsOptional({ always: true })
   @IsString({ always: true })
   @Column({ type: 'varchar', length: 255, nullable: true, default: null })
-  notes: string;
+  notes?: string;
+
+  @JoinColumn({ name: 'attachmentId' })
+  @OneToOne(() => Attachment, {
+    nullable: true,
+  })
+  public attachment?: Attachment;
+
+  @Column({ nullable: true })
+  public attachmentId?: number;
 }

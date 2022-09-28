@@ -1,3 +1,4 @@
+import { Attachment } from '../attachments/entities/attachment.entity';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import {
   NNK_CURRENCIES,
@@ -16,20 +17,13 @@ export const expenseDto: CreateExpenseDto = {
   currency: NNK_CURRENCIES.BAM,
   donor: NNK_DONORS.DONORBOX,
   notes: 'This is an example expense',
+  attachment: new Attachment(),
 };
 
 export const expenses = [
   {
+    ...expenseDto,
     id: 1,
     createdDate: new Date(Date.now()),
-    expenseDate: new Date(Date.now()),
-    team: NNK_TEAMS.BHC,
-    category: NNK_EXPENSES_CATEGORIES.NFIs,
-    concept: NNK_EXPENSES_CONCEPTS.clothes,
-    amount: 100.0,
-    totalAmount: 51,
-    currency: NNK_CURRENCIES.BAM,
-    donor: NNK_DONORS.DONORBOX,
-    notes: 'This is an example expense',
   },
 ];

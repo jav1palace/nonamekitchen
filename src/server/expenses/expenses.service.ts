@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AttachmentsService } from '../attachments/attachments.service';
 import { Repository } from 'typeorm';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
@@ -11,11 +12,15 @@ export class ExpensesService {
   constructor(
     @InjectRepository(Expense)
     private readonly expenseRepository: Repository<Expense>,
+    private readonly attachmentsService: AttachmentsService,
   ) {}
 
   create(createExpenseDto: CreateExpenseDto) {
     const newExpense = this.expenseRepository.create(createExpenseDto);
-    this.calculateTotalAmount(newExpense);
+    newExpense.totalAmount = this.calculateTotalAmount(
+      newExpense.amount,
+      newExpense.currency,
+    );
     return this.expenseRepository.save(newExpense);
   }
 
@@ -47,20 +52,30 @@ export class ExpensesService {
     return this.expenseRepository.delete(id);
   }
 
-  calculateTotalAmount(newExpense) {
-    switch (newExpense.currency) {
+  async uploadAttachment(expenseId: number, file: Express.Multer.File) {
+    const attachment = await this.attachmentsService.uploadAttachment(file);
+    await this.expenseRepository.update(expenseId, {
+      attachmentId: attachment.id,
+    });
+    return attachment;
+  }
+
+  calculateTotalAmount(amount: number, currency: string): number {
+    let totalAmount: number;
+    switch (currency) {
       case NNK_CURRENCIES.BAM:
-        newExpense.totalAmount = newExpense.amount * 0.51;
+        totalAmount = amount * 0.51;
         break;
       case NNK_CURRENCIES.DINAR:
-        newExpense.totalAmount = newExpense.amount * 0.0085;
+        totalAmount = amount * 0.0085;
         break;
       case NNK_CURRENCIES.HRK:
-        newExpense.totalAmount = newExpense.amount / 7.4991;
+        totalAmount = amount / 7.4991;
         break;
       case NNK_CURRENCIES.EURO:
-        newExpense.totalAmount = newExpense.amount;
+        totalAmount = amount;
         break;
     }
+    return parseFloat(totalAmount.toFixed(2));
   }
 }

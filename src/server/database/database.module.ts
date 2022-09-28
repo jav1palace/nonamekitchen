@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { Attachment } from '../attachments/entities/attachment.entity';
 import { Expense } from '../expenses/entities/expense.entity';
-
 import { User } from '../users/entities/user.entity';
 
 // const baseConfig: TypeOrmModuleOptions = {
@@ -22,7 +22,7 @@ const baseConfig: TypeOrmModuleOptions = {
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  entities: [User, Expense],
+  entities: [User, Expense, Attachment],
   synchronize: true,
 };
 
@@ -30,7 +30,7 @@ const testConfig: TypeOrmModuleOptions = {
   type: 'sqlite',
   synchronize: true,
   database: ':memory:',
-  entities: [User, Expense],
+  entities: [User, Expense, Attachment],
 };
 
 const connections = {

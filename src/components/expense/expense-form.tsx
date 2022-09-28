@@ -15,7 +15,7 @@ import { DatePickerField } from './date-picker/date-picker';
 import styles from './expense-form.module.css';
 import { FieldItem } from './item/item';
 import { ExpenseSchema } from './expense.schema';
-import { Thumbnail } from './thumbnail/thumbnail';
+import { FieldAttachment } from './attachment/attachment';
 
 export const ExpenseForm = () => {
   const router = useRouter();
@@ -30,7 +30,10 @@ export const ExpenseForm = () => {
     currency: undefined,
     donor: undefined,
     notes: undefined,
-    file: undefined,
+    attachment: {
+      filename: '',
+      data: undefined,
+    },
   };
 
   return (
@@ -154,27 +157,15 @@ export const ExpenseForm = () => {
                   onChange={setFieldValue}
                   options={NNK_DONORS}
                 />
-
-                <div className="mb-3">
-                  <label> Attachment</label>
-                  <div className="form-group">
-                    <input
-                      id="file"
-                      name="file"
-                      type="file"
-                      onChange={(event) => {
-                        setFieldValue('file', event.currentTarget.files[0]);
-                      }}
-                      className="form-control"
-                    />
-                    <img className={styles.thumbnail} src={URL.createObjectURL(values.file)} />
-                  </div>
-                  {errors.file && touched.file && (
-                    <div className="text-danger">
-                      {String(errors.file)}
-                    </div>
-                  )}
-                </div>
+                
+                <FieldAttachment
+                  name="attachment"
+                  errors={errors}
+                  touched={touched}
+                  value={values.attachment}
+                  onChange={setFieldValue}
+                />
+              
 
                 <FieldItem
                   name="notes"
