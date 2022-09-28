@@ -1,5 +1,7 @@
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
+
 import { createExpense } from '../../client/api';
 import { CreateExpenseDto } from '../../server/expenses/dto/create-expense.dto';
 import {
@@ -9,157 +11,169 @@ import {
   NNK_EXPENSES_CONCEPTS,
   NNK_TEAMS,
 } from '../../server/expenses/expenses.constants';
-
+import { DatePickerField } from './date-picker/date-picker';
 import styles from './expense-input.module.css';
+import { FieldItem } from './item/item';
+import { ExpenseSchema } from './schema/expense.schema';
 
-export function ExpenseForm() {
-  const [error] = useState('');
+export const ExpenseForm = () => {
+  const router = useRouter();
+  const [error, setError] = useState('');
 
-  const getOptions = (options) => {
-    return (Object.keys(options) as Array<keyof typeof String>).map((key) => {
-      return (
-        <option key={key} value={key}>
-          {options[key]}
-        </option>
-      );
-    });
+  const initialValues: CreateExpenseDto = {
+    expenseDate: new Date(),
+    team: undefined,
+    category: undefined,
+    concept: undefined,
+    amount: undefined,
+    currency: undefined,
+    donor: undefined,
+    notes: undefined,
   };
+
   return (
     <div className={styles.login_box + ' p-3'}>
-      <h1 className="display-6 mb-3">New Expense</h1>
       {error ? (
         <div className="alert alert-danger" role="alert">
-          Error: {error}
+          <b>Error:</b> {error}
         </div>
       ) : null}
       <Formik
-        initialValues={{
-          expenseDate: new Date().toISOString().split('T')[0],
-          team: '',
-          category: '',
-          concept: '',
-          amount: '',
-          currency: '',
-          donor: '',
-          notes: '',
-        }}
+        initialValues={initialValues}
+        validationSchema={ExpenseSchema}
         onSubmit={(
           expense: CreateExpenseDto,
-          { setSubmitting }: FormikHelpers<any>,
+          { setSubmitting }: FormikHelpers<CreateExpenseDto>,
         ) => {
+          setError('');
           setTimeout(() => {
-            createExpense(expense);
-            setSubmitting(false);
+            const success = () =>
+              router.push({
+                pathname: '/success',
+                query: {
+                  path: '/input',
+                  message: 'Your expense has been created successfully',
+                },
+              });
+            const failure = async (response: Response) => {
+              const responseJSON = await response.json();
+              setError(responseJSON['message']);
+              setSubmitting(false);
+            };
+            createExpense(expense, success, failure);
           }, 500);
         }}
       >
-        <Form>
-          <div className="mb-3">
-            <Field
-              className="form-control"
-              id="expenseDate"
-              name="expenseDate"
-              aria-describedby="expenseDateHelp"
-              type="date"
-            />
-          </div>
+        {({
+          values,
+          setFieldValue,
+          isSubmitting,
+          errors,
+          touched,
+          isValid,
+          dirty,
+        }) => (
+          <Form>
+            {isSubmitting ? (
+              <div className="d-flex align-items-center justify-content-center">
+                <div className="spinner-grow" role="status"></div>
+              </div>
+            ) : (
+              <>
+                <div className="mb-3">
+                  <label> Expense Date</label>
+                  <DatePickerField
+                    name="expenseDate"
+                    value={values.expenseDate}
+                    onChange={setFieldValue}
+                  />
+                  {errors.expenseDate && touched.expenseDate && (
+                    <div className="text-danger">
+                      {String(errors.expenseDate)}
+                    </div>
+                  )}
+                </div>
 
-          <div className="mb-3">
-            <Field
-              as="select"
-              className="form-control"
-              id="team"
-              name="team"
-              placeholder="Team"
-              aria-describedby="teamHelp"
-            >
-              <option>Choose one team</option>
-              {getOptions(NNK_TEAMS)}
-            </Field>
-          </div>
+                <FieldItem
+                  name="team"
+                  as="select"
+                  errors={errors}
+                  touched={touched}
+                  value={values.team}
+                  onChange={setFieldValue}
+                  options={NNK_TEAMS}
+                />
 
-          <div className="mb-3">
-            <Field
-              as="select"
-              className="form-control"
-              id="category"
-              name="category"
-              placeholder="Category"
-              aria-describedby="categoryHelp"
-            >
-              <option>Choose one category</option>
-              {getOptions(NNK_EXPENSES_CATEGORIES)}
-            </Field>
-          </div>
+                <FieldItem
+                  name="category"
+                  as="select"
+                  errors={errors}
+                  touched={touched}
+                  value={values.category}
+                  onChange={setFieldValue}
+                  options={NNK_EXPENSES_CATEGORIES}
+                />
 
-          <div className="mb-3">
-            <Field
-              as="select"
-              className="form-control"
-              id="concept"
-              name="concept"
-              placeholder="Concept"
-              aria-describedby="conceptHelp"
-            >
-              <option>Choose one concept</option>
-              {getOptions(NNK_EXPENSES_CONCEPTS)}
-            </Field>
-          </div>
+                <FieldItem
+                  name="concept"
+                  as="select"
+                  errors={errors}
+                  touched={touched}
+                  value={values.concept}
+                  onChange={setFieldValue}
+                  options={NNK_EXPENSES_CONCEPTS}
+                />
 
-          <div className="mb-3">
-            <Field
-              className="form-control"
-              id="amount"
-              name="amount"
-              type="number"
-              placeholder="Amount"
-              aria-describedby="amountHelp"
-            />
-          </div>
+                <FieldItem
+                  name="amount"
+                  type="number"
+                  errors={errors}
+                  touched={touched}
+                  value={values.amount}
+                  onChange={setFieldValue}
+                />
 
-          <div className="mb-3">
-            <Field
-              as="select"
-              className="form-control"
-              id="currency"
-              name="currency"
-              placeholder="Currency"
-              aria-describedby="currencyHelp"
-            >
-              <option>Choose the currency</option>
-              {getOptions(NNK_CURRENCIES)}
-            </Field>
-          </div>
+                <FieldItem
+                  name="currency"
+                  as="select"
+                  errors={errors}
+                  touched={touched}
+                  value={values.currency}
+                  onChange={setFieldValue}
+                  options={NNK_CURRENCIES}
+                />
 
-          <div className="mb-3">
-            <Field
-              as="select"
-              className="form-control"
-              id="donor"
-              name="donor"
-              placeholder="Donor"
-              aria-describedby="donorHelp"
-            >
-              <option>Choose a donor</option>
-              {getOptions(NNK_DONORS)}
-            </Field>
-          </div>
+                <FieldItem
+                  name="donor"
+                  as="select"
+                  errors={errors}
+                  touched={touched}
+                  value={values.donor}
+                  onChange={setFieldValue}
+                  options={NNK_DONORS}
+                />
 
-          <div className="mb-3">
-            <Field
-              className="form-control"
-              id="notes"
-              name="notes"
-              placeholder="Notes"
-              aria-describedby="notesHelp"
-            />
-          </div>
+                <FieldItem
+                  name="notes"
+                  type="textarea"
+                  errors={errors}
+                  touched={touched}
+                  value={values.notes}
+                  onChange={setFieldValue}
+                />
 
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </Form>
+                <button
+                  type="submit"
+                  disabled={!(dirty && isValid)}
+                  className="btn btn-primary"
+                >
+                  Submit
+                </button>
+              </>
+            )}
+          </Form>
+        )}
       </Formik>
     </div>
   );
-}
+};

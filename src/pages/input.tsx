@@ -1,17 +1,14 @@
-import 'bootstrap/dist/css/bootstrap.css';
-
 import { NextPage } from 'next';
+import { Layout } from '../components/layout.tsx/layout';
 
 import { ExpenseForm } from '../components/expense-input/expense-input';
 
 // react component
-const InputPage: NextPage = ({}) => {
-  return (
-    <main className="vh-100 d-flex justify-content-center align-items-center">
-      <ExpenseForm />
-    </main>
-  );
-};
+const InputPage: NextPage = ({}) => (
+  <Layout>
+    <ExpenseForm />
+  </Layout>
+);
 
 export async function getServerSideProps(context) {
   let result = {};

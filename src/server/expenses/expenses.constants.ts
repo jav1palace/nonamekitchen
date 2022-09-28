@@ -70,7 +70,7 @@ export enum NNK_EXPENSES_CONCEPTS {
   mechanic_check_fixing = 'mechanic_check / fixing',
   mechanic_check_fixing_health_car = 'mechanic_check / fixing health car',
   insurances = 'insurances',
-  emergency_kit = '',
+  emergency_kit = 'emergency kit',
   others = 'others (toll, parking)',
   ingredients_meals = 'ingredients / meals',
   extra_food_packs = 'extra food packs',

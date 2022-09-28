@@ -1,12 +1,19 @@
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import { login } from '../../client/api';
 import { Credentials } from '../../client/interfaces/api.interface';
+import { LoginDto } from '../../server/users/dto/login.dto';
+import { FieldItem } from '../expense-input/item/item';
 import styles from './login-form.module.css';
 
-export function LoginForm() {
+const initialValues: LoginDto = {
+  username: '',
+  password: '',
+};
+
+export const LoginForm = () => {
   const router = useRouter();
   const [error, setError] = useState('');
 
@@ -19,53 +26,47 @@ export function LoginForm() {
         </div>
       ) : null}
       <Formik
-        initialValues={{
-          username: '',
-          password: '',
-        }}
+        initialValues={initialValues}
         onSubmit={(
           credentials: Credentials,
           { setSubmitting }: FormikHelpers<Credentials>,
         ) => {
           setTimeout(() => {
+            const success = () => router.push('/input');
+            const failure = async (response: Response) => {
+              const responseJSON = await response.json();
+              setError(responseJSON['message']);
+            };
+            login(credentials, success, failure);
             setSubmitting(false);
-
-            login(credentials).then((response: Response) => {
-              if (response.status < 300) {
-                router.push('/input');
-              } else {
-                setError('Error');
-              }
-            });
           }, 500);
         }}
       >
-        <Form>
-          <div className="mb-3">
-            <Field
-              className="form-control"
-              id="username"
+        {({ values, setFieldValue, errors, touched }) => (
+          <Form>
+            <FieldItem
               name="username"
-              placeholder="Username"
-              aria-describedby="usernameHelp"
+              errors={errors}
+              touched={touched}
+              value={values.username}
+              onChange={setFieldValue}
             />
-          </div>
 
-          <div className="mb-3">
-            <Field
-              className="form-control"
-              id="password"
+            <FieldItem
               name="password"
-              placeholder="Password"
               type="password"
+              errors={errors}
+              touched={touched}
+              value={values.password}
+              onChange={setFieldValue}
             />
-          </div>
 
-          <button type="submit" className="btn btn-primary">
-            Login
-          </button>
-        </Form>
+            <button type="submit" className="btn btn-primary">
+              Login
+            </button>
+          </Form>
+        )}
       </Formik>
     </div>
   );
-}
+};

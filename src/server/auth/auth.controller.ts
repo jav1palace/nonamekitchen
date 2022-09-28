@@ -3,6 +3,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Redirect,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -31,6 +32,7 @@ export class AuthController {
 
   @UseGuards(AuthenticatedGuard)
   @Get('/logout')
+  @Redirect('/login')
   logout(@Request() req): any {
     req.session.destroy();
     return { msg: 'The user session has ended' };
