@@ -7,12 +7,17 @@ import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import { memoryStorage } from 'multer';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
       isGlobal: true,
+    }),
+    MulterModule.register({
+      storage: memoryStorage(),
     }),
     UsersModule,
     ExpensesModule,

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AttachmentsService } from 'src/attachments/attachments.service';
 import { Repository } from 'typeorm';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
@@ -11,6 +12,7 @@ export class ExpensesService {
   constructor(
     @InjectRepository(Expense)
     private readonly expenseRepository: Repository<Expense>,
+    private readonly attachmentsService: AttachmentsService,
   ) {}
 
   create(createExpenseDto: CreateExpenseDto) {
@@ -48,6 +50,14 @@ export class ExpensesService {
     }
 
     return this.expenseRepository.delete(id);
+  }
+
+  async uploadAttachment(expenseId: number, file: Express.Multer.File) {
+    const attachment = await this.attachmentsService.uploadAttachment(file);
+    await this.expenseRepository.update(expenseId, {
+      attachmentId: attachment.id,
+    });
+    return attachment;
   }
 
   calculateTotalAmount(amount: number, currency: string): number {

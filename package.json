@@ -30,8 +30,10 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.1.2",
+    "@nestjs/serve-static": "^3.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "bcrypt": "^5.0.1",
+    "build": "^0.1.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "husky": "^8.0.1",
@@ -43,6 +45,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
+    "sharp": "^0.31.0",
     "typeorm": "^0.3.10"
   },
   "devDependencies": {
@@ -51,6 +54,7 @@
     "@nestjs/testing": "^9.1.2",
     "@types/express": "^4.17.14",
     "@types/jest": "28.1.8",
+    "@types/multer": "~1.4.6",
     "@types/node": "^18.7.22",
     "@types/passport-local": "^1.0.34",
     "@types/supertest": "^2.0.11",
