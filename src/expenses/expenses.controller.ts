@@ -44,7 +44,7 @@ export class ExpensesController {
     return this.expensesService.remove(+id);
   }
 
-  @Post('image')
+  @Post('attachment')
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(
     @Req() request: Request,
