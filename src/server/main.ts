@@ -1,5 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import * as bodyParser from 'body-parser';
 import session from 'express-session';
 import { RenderService } from 'nest-next';
 import passport from 'passport';
@@ -21,6 +22,8 @@ async function bootstrap() {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   const service = app.get(RenderService);
   service.setErrorHandler(async (err, req, res) => {

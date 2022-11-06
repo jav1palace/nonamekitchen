@@ -12,5 +12,5 @@ export const ExpenseSchema = Yup.object().shape({
   currency: Yup.string().required('Required'),
   donor: Yup.string().required('Required'),
   notes: Yup.string(),
-  file: Yup.mixed().required('Include a file'),
+  attachment: Yup.mixed().required('Include a file'),
 });
