@@ -1,9 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
+import request from 'supertest';
 
-import { AppModule } from '../src/app.module';
-import { UsersService } from '../src/users/users.service';
+import { AppModule } from './../src/server/app.module';
+import { UsersService } from '../src/server/users/users.service';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -101,6 +101,8 @@ describe('UserController (e2e)', () => {
       .then((res) => {
         expect(res.body).toHaveProperty('id');
         expect(res.body).toHaveProperty('password'); // the updated field
+        expect(res.body).toHaveProperty('username'); // the existing field
+        expect(res.body).toHaveProperty('isActive'); // the existing field
       }));
 
   it('/:id (DELETE)', () =>
