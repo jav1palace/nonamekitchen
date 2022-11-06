@@ -37,10 +37,12 @@ export const FieldAttachment = ({
           }}
           className="form-control"
         />
-        {value.attachment?.data && (<img
-          className={styles.thumbnail}
-          src={URL.createObjectURL(new Blob([value.attachment?.data]))}
-        />)}
+        {value.attachment?.data && (
+          <img
+            className={styles.thumbnail}
+            src={URL.createObjectURL(new Blob([value.attachment?.data]))}
+          />
+        )}
       </div>
       {errors.attachment && touched.attachment && (
         <div className="text-danger">{String(errors.attachment)}</div>

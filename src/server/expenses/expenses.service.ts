@@ -55,8 +55,8 @@ export class ExpensesService {
   async uploadAttachment(expenseId: number, file: Express.Multer.File) {
     const attachment = await this.googleService.uploadAttachment(file);
     this.update(expenseId, {
-      attachment
-    })
+      attachment,
+    });
   }
 
   calculateTotalAmount(amount: number, currency: string): number {

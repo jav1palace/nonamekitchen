@@ -157,7 +157,7 @@ export const ExpenseForm = () => {
                   onChange={setFieldValue}
                   options={NNK_DONORS}
                 />
-                
+
                 <FieldAttachment
                   name="attachment"
                   errors={errors}
@@ -165,7 +165,7 @@ export const ExpenseForm = () => {
                   value={values.attachment}
                   onChange={setFieldValue}
                 />
-              
+
                 <FieldItem
                   name="notes"
                   type="textarea"

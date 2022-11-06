@@ -14,7 +14,6 @@ const doFetch = (
     headers: {
       'Content-Type': 'application/json',
     },
-
     ...(payload && { body: JSON.stringify(payload) }),
     ...(extraOptions && { extraOptions }),
   });
