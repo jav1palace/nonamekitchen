@@ -166,7 +166,6 @@ export const ExpenseForm = () => {
                   onChange={setFieldValue}
                 />
               
-
                 <FieldItem
                   name="notes"
                   type="textarea"

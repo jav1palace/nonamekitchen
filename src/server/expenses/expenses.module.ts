@@ -3,10 +3,10 @@ import { ExpensesService } from './expenses.service';
 import { ExpensesController } from './expenses.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Expense } from './entities/expense.entity';
-import { AttachmentsModule } from '../attachments/attachments.module';
+import { GoogleModule } from '../google/google.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Expense]), AttachmentsModule],
+  imports: [TypeOrmModule.forFeature([Expense]), GoogleModule],
   controllers: [ExpensesController],
   providers: [ExpensesService],
   exports: [TypeOrmModule],

@@ -1,4 +1,3 @@
-import { Attachment } from '../attachments/entities/attachment.entity';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import {
   NNK_CURRENCIES,
@@ -17,7 +16,7 @@ export const expenseDto: CreateExpenseDto = {
   currency: NNK_CURRENCIES.BAM,
   donor: NNK_DONORS.DONORBOX,
   notes: 'This is an example expense',
-  attachment: new Attachment(),
+  attachment: undefined,
 };
 
 export const expenses = [

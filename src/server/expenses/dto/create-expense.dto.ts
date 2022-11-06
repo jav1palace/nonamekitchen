@@ -7,7 +7,6 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { CreateAttachmentDto } from '../../attachments/dto/create-attachment.dto';
 import {
   NNK_CURRENCIES,
   NNK_DONORS,
@@ -51,6 +50,7 @@ export class CreateExpenseDto {
   @IsOptional()
   notes?: string;
 
-  @IsNotEmpty()
-  attachment: CreateAttachmentDto;
+  @IsString()
+  @IsOptional()
+  attachment?: string;
 }

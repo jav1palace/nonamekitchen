@@ -1,5 +1,4 @@
 import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { Attachment } from 'src/server/attachments/entities/attachment.entity';
 import {
   Column,
   Entity,
@@ -61,12 +60,8 @@ export class Expense {
   @Column({ type: 'varchar', length: 255, nullable: true, default: null })
   notes?: string;
 
-  @JoinColumn({ name: 'attachmentId' })
-  @OneToOne(() => Attachment, {
-    nullable: true,
-  })
-  public attachment?: Attachment;
-
-  @Column({ nullable: true })
-  public attachmentId?: number;
+  @IsString({ always: true })
+  @IsOptional({ always: true })
+  @Column({ type: 'varchar', length: 100, nullable: false })
+  attachment?: string;
 }

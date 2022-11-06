@@ -44,12 +44,13 @@ export class ExpensesController {
     return this.expensesService.remove(+id);
   }
 
-  @Post('image')
+  @Post(':id/image')
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(
     @Req() request: Request,
+    @Param('id') expenseId: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.expensesService.uploadAttachment(3, file);
+    return this.expensesService.uploadAttachment(expenseId, file);
   }
 }
